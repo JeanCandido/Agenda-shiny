@@ -1,15 +1,14 @@
 from shiny import App, ui, reactive, render
-from shiny.types import SilentException
 
 app_ui = ui.page_fluid(
-    ui.h2("Agenda"),
+    ui.h2("Gerenciador de Tarefas"),
     
     ui.input_text("titulo", "Nome da Tarefa"),
     ui.input_text_area("descricao", "Descrição da Tarefa"),
     ui.input_action_button("enviar", "Adicionar Tarefa"),
 
     ui.hr(),
-    ui.h3("Tarefas:"),
+    ui.h3("Tarefas a fazer:"),
     ui.output_ui("lista_tarefas")
 )
 
@@ -45,10 +44,8 @@ def server(input, output, session):
             @reactive.Effect
             @reactive.event(input[btn_id])
             def _():
-                # Remove a tarefa correspondente
                 id_para_remover = int(btn_id.split("_")[1])
                 tarefas.set([t for t in tarefas.get() if t["id"] != id_para_remover])
-                raise SilentException()  # Evita recarregamento desnecessário
 
             tag_list.append(
                 ui.div(
